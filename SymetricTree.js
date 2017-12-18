@@ -8,44 +8,79 @@
      this.left = this.right = null;
   }
 
-/**
- * @param {TreeNode} root
- * @return {boolean}
- */
+// Solving using recursion
 var isSymmetric = function(root) {
-
+  return mirrorTrees(root, root)
 };
-function SymetricTree(myTree) {
-  if((!myTree.left || !myTree.right)||(myTree.left.val != myTree.right.val)){
-    return false;
-  }
-  else {
-    return isSymetric(myTree.left, myTree.right)
-  }
-}
 
-
-function isSymetric(leftNode, rightNode){
-  if(!leftNode.left && !leftNode.right && !rightNode.left && !rightNode.right){
-    return true;
-  }
-  if((!leftNode.left && rightNode.right || leftNode.left && !rightNode.right )){
-    return false;
-  }
-  if(leftNode.left.val != rightNode.right.val || leftNode.right.val != rightNode.left.val){
-    return false
-  }
-  leftNode = leftNode.left
-  rightNode = rightNode.right
-  if(leftNode.left.val == rightNode.right && leftNode.right.val == rightNode.left.val && isSymetric(leftNode, rightNode)){
+var mirrorTrees = function (tree1, tree2) {
+  if(!tree1 && !tree2){
     return true
   }
+  if(!tree1 || !tree2){
+    return false
+  }
+  var leftTree = mirrorTrees(tree1.left, tree2.right)
+  var rightTree = mirrorTrees(tree1.right, tree2.left)
+  if(tree1.val == tree2.val && leftTree && rightTree){
+    return true;
+  } else {
+    return false
+  }
 }
+
+// Solving using iteration
+// 1. use queue dataStructure
+
+var isSymmetric = function(root) {
+  var nodeQueue = [];
+  //First we add root to our queue
+  nodeQueue.push(root)
+  nodeQueue.push(root)
+
+  while (nodeQueue.length > 0) {
+    var  t1 = nodeQueue.shift();
+    var  t2 = nodeQueue.shift();
+    if(!t1 && !t2){
+      continue;
+    }
+    if(!t1 || !t2){ return false; }
+
+    if(t1.val != t2.val){ return false; }
+    nodeQueue.push(t1.left)
+    nodeQueue.push(t1.right)
+    nodeQueue.push(t1.right)
+    nodeQueue.push(t1.left)
+  }
+  return true;
+};
+
+//Test Cases
 
 var q = new TreeNode(5)
 q.left = new TreeNode(6)
 q.right = new TreeNode(6)
-q.left.left = new TreeNode(2)
-q.right.left = new TreeNode(2)
+
+var p = new TreeNode(5)
+p.left = new TreeNode(7)
+p.right = new TreeNode(6)
 console.log("My tree", q);
-console.log(SymetricTree(q));
+console.log(isSymmetric(q));
+// console.log("My tree", p);
+// console.log(isSymmetric(p));
+
+
+//Second Approach
+// var isSymmetric = function(root) {
+//   return root === null || _isSymmetric(root.left, root.right);
+// };
+//
+// function _isSymmetric (left, right) {
+//   if (left === null || right === null) {
+//     return left === right;
+//   }
+//   if (left.val !== right.val) {
+//     return false;
+//   }
+//   return _isSymmetric(left.left, right.right) && _isSymmetric(left.right, right.left);
+// }
