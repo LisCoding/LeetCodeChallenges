@@ -42,3 +42,5 @@ var countAndSay = function(n) {
     return currentStr
 };
 console.log(countAndSay(4));
+console.log(countAndSay(5));
+console.log(countAndSay(2));
